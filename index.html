@@ -258,6 +258,27 @@
       font-weight:700;
     }
 
+    .video-wrap{
+  position: relative;
+  padding-top: 56.25%; /* 16:9 */
+  width: 100%;
+  max-width: 900px;
+  margin: 30px auto;
+  border-radius: 18px;
+  overflow: hidden;
+  border:1px solid var(--border);
+  background: rgba(0,0,0,.25);
+  box-shadow: var(--shadow);
+}
+.video-wrap iframe{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+
     /* Responsive */
     @media (max-width: 980px){
       .card{ grid-column: span 6; }
@@ -313,6 +334,13 @@
     <section id="view-home" class="view active">
       <div id="quizGrid" class="grid"></div>
 
+        <div class="video-wrap">
+    <iframe
+      src="https://drive.google.com/file/d/1rKAv7DqP1BLR3EoPm29YsVUzeLjozkeC/preview"
+      allow="autoplay; fullscreen"
+      allowfullscreen>
+    </iframe>
+  </div>
       <footer>
       </footer>
     </section>
@@ -2206,36 +2234,6 @@ results: {
     ]
   }
 ];
-
-    <div class="video-wrap">
-  <iframe
-    src="https://drive.google.com/file/d/1rKAv7DqP1BLR3EoPm29YsVUzeLjozkeC/preview"
-    allow="autoplay; fullscreen"
-    allowfullscreen>
-  </iframe>
-</div>
-
-    <style>
-.video-wrap{
-  position: relative;
-  padding-top: 56.25%; /* 16:9 */
-  width: 100%;
-  max-width: 900px;
-  margin: 30px auto;
-}
-.video-wrap iframe{
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-  border-radius: 12px;
-}
-</style>
-
-
-
-
 
     // ---------- App State ----------
     const state = {
