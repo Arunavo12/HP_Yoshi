@@ -375,10 +375,11 @@
     const QUIZZES = [
       {
         id: "house-sorting",
-        title: "Which House Fits You Best?",
-        desc: "A vibes-based sorting quiz — no gatekeeping, just magic.",
-        category: "sorting",
-        minutes: 5,
+  title: "Which House Fits You Best?",
+  desc: "A vibes-based sorting quiz — no gatekeeping, just magic.",
+  category: "sorting",
+  minutes: 5,
+  cover: "houses.png",
         questions: [
           { text: "A friend is being unfairly blamed. What do you do first?", options: [
             { title: "Step in immediately", desc: "Even if it gets messy.", scores: { GRYFFINDOR: 3, HUFFLEPUFF: 1 } },
@@ -451,10 +452,11 @@
 
       {
         id: "character-vibes",
-        title: "Which Character Matches Your Energy?",
-        desc: "Not ‘who you like most’ — who you *move like*.",
-        category: "personality",
-        minutes: 6,
+  title: "Which Character Matches Your Energy?",
+  desc: "Not ‘who you like most’ — who you *move like*.",
+  category: "personality",
+  minutes: 6,
+  cover: "characters.png",
         questions: [
           { text: "In a group project, you usually…", options: [
             { title: "Carry the stress so others don’t", desc: "Responsibility mode.", scores: { HERMIONE: 3 } },
@@ -517,24 +519,56 @@
             { title: "The strategy room", desc: "", scores: { SNAPE: 3, DRACO: 2 } },
           ]}
         ],
-        results: {
-          HARRY: { title: "Harry Potter ⚡", desc: "You don’t ask to be the main character — you just keep showing up when it matters." },
-          HERMIONE: { title: "Hermione Granger 📚", desc: "You’re prepared, principled, and you don’t let people stay wrong when it counts." },
-          RON: { title: "Ron Weasley 🧡", desc: "You’re loyal, funny, and real — the glue that holds the group together." },
-          LUNA: { title: "Luna Lovegood 🌙", desc: "Gentle, observant, and quietly fearless. You see magic where others see ‘weird’." },
-          NEVILLE: { title: "Neville Longbottom 🌿", desc: "You’re proof that courage grows. You get stronger by choosing to try." },
-          FREDGEORGE: { title: "Fred & George energy 🎇", desc: "You’re the chaos that makes life lighter — but you’re sharper than people assume." },
-          DRACO: { title: "Draco Malfoy 🐍", desc: "You’re guarded, ambitious, and you play the social game well — even when you’re conflicted." },
-          SNAPE: { title: "Severus Snape 🖤", desc: "Complex, intense, and loyal in your own way. You don’t need applause to do the hard thing." }
-        }
-      },
+results: {
+  HARRY: { 
+    title: "Harry Potter ⚡", 
+    desc: "You don’t ask to be the main character — you just keep showing up when it matters.",
+    image: "harry.png"
+  },
+  HERMIONE: { 
+    title: "Hermione Granger 📚", 
+    desc: "You’re prepared, principled, and you don’t let people stay wrong when it counts.",
+    image: "hermoine.png"
+  },
+  RON: { 
+    title: "Ron Weasley 🧡", 
+    desc: "You’re loyal, funny, and real — the glue that holds the group together.",
+    image: "ron.png"
+  },
+  LUNA: { 
+    title: "Luna Lovegood 🌙", 
+    desc: "Gentle, observant, and quietly fearless. You see magic where others see ‘weird’.",
+    image: "luna.png"
+  },
+  NEVILLE: { 
+    title: "Neville Longbottom 🌿", 
+    desc: "You’re proof that courage grows. You get stronger by choosing to try.",
+    image: "neville.png"
+  },
+  FREDGEORGE: { 
+    title: "Fred & George energy 🎇", 
+    desc: "You’re the chaos that makes life lighter — but you’re sharper than people assume.",
+    image: "fred-george.png"
+  },
+  DRACO: { 
+    title: "Draco Malfoy 🐍", 
+    desc: "You’re guarded, ambitious, and you play the social game well — even when you’re conflicted.",
+    image: "draco.png"
+  },
+  SNAPE: { 
+    title: "Severus Snape 🖤", 
+    desc: "Complex, intense, and loyal in your own way. You don’t need applause to do the hard thing.",
+    image: "snape.png"
+  }
+}
+},
 
       {
-        id: "patronus-vibe",
-        title: "What’s Your Patronus Vibe?",
-        desc: "Your protective energy — deeper than just an animal.",
-        category: "fun",
-        minutes: 5,
+         id: "patronus-vibe",
+  title: "What’s Your Patronus Vibe?",
+  category: "fun",
+  minutes: 5,
+  cover: "patronus.png",
         questions: [
           { text: "When life gets heavy, you cope by…", options: [
             { title: "Moving your body", desc: "", scores: { STAG: 3, WOLF: 2 } },
@@ -609,11 +643,11 @@
       },
 
       {
-        id: "wand-vibe",
-        title: "What’s Your Wand Vibe?",
-        desc: "Core + wood + your magical essence.",
-        category: "lore",
-        minutes: 5,
+       id: "wand-vibe",
+  title: "What’s Your Wand Vibe?",
+  category: "lore",
+  minutes: 5,
+  cover: "wands.png",
         questions: [
           { text: "You’re at your best when you’re…", options: [
             { title: "Improvising", desc: "", scores: { PHOENIXCORE: 3 } },
@@ -748,10 +782,10 @@
 
       {
         id: "magical-career",
-        title: "Your Magical Career Path",
-        desc: "What would you do after Hogwarts?",
-        category: "fun",
-        minutes: 4,
+  title: "Your Magical Career Path",
+  category: "fun",
+  minutes: 4,
+  cover: "job.png",
         questions: [
           { text: "Your dream job involves:", options: [
             { title: "Adventure & danger", desc: "", scores: { AUROR: 3 } },
@@ -794,11 +828,11 @@
       },
 
       {
-        id: "deathly-hallows",
-        title: "Which Deathly Hallow Calls to You?",
-        desc: "Elder Wand, Resurrection Stone, or Invisibility Cloak?",
-        category: "lore",
-        minutes: 3,
+       id: "deathly-hallows",
+  title: "Which Deathly Hallow Calls to You?",
+  category: "lore",
+  minutes: 3,
+  cover: "deathly-hallows.png",
         questions: [
           { text: "You’d use ultimate power to:", options: [
             { title: "Win any duel", desc: "", scores: { WAND: 3 } },
@@ -1007,13 +1041,12 @@
     category: "lore",
     minutes: 7,
     scoreText: (c,t) => {
-      scoreText: (c,t) => {
   if(c === t) return "YOSHI NO WAY!!! Perfect! Not even the basilisk could stop you 🐍💚";
   if(c >= Math.ceil(t*0.8)) return "So close, Yoshi! You're slithering right through this 🐍";
   if(c >= Math.ceil(t*0.5)) return "Good job, Yoshi! You survived the Chamber 👏";
   return "Yoshi... are you scared of snakes again? 🐍😭 Come on, let’s rewatch it together!";
-}
-    },
+},
+
     questions: [
       {
         text: "Who is the new Defense Against the Dark Arts teacher?",
@@ -2276,8 +2309,7 @@ ${imageSrc ? `
     ">
   </div>
 ` : ''}
-  </div>
-        <div class="top" style="${imageSrc ? 'padding-top:12px;' : ''}">
+            <div class="top" style="${imageSrc ? 'padding-top:12px;' : ''}">
           <div>
             <h3>${escapeHtml(q.title)}</h3>
           </div>
@@ -2292,6 +2324,7 @@ ${imageSrc ? `
         </div>
       </article>
     `;
+
   }).join("");
   
       // Click handlers
@@ -2493,19 +2526,38 @@ Score: ${correct}/${total} (${pct}%)`;
       progressEl.style.width = "100%";
 
       const r = quiz.results[winner];
-      resultEl.style.display = "block";
-      resultEl.innerHTML = `
-        <h2>Your result:</h2>
-        <div class="resultPill">${escapeHtml(r.title)}</div>
-        <p>${escapeHtml(r.desc)}</p>
-        <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
-          <button class="btn primary" id="btnRetake">Retake quiz</button>
-          <button class="btn" id="btnShare">Copy result text</button>
-        </div>
-        <p style="margin-top:12px; font-size:12.5px; opacity:.9;">
-          Result key: <span style="opacity:.9">${escapeHtml(winner)}</span>
-        </p>
-      `;
+let resultHTML = '';
+
+if (r.image) {
+  resultHTML += `
+    <div style="text-align:center; margin-bottom:20px;">
+      <img src="${r.image}" alt="${escapeHtml(r.title)}" style="
+        max-width:100%; 
+        max-height:360px; 
+        border-radius:18px; 
+        box-shadow: var(--shadow);
+        object-fit: contain;
+        background:#0f1020;
+        padding:8px;
+      ">
+    </div>
+  `;
+}
+
+resultHTML += `
+  <h2>Your result:</h2>
+  <div class="resultPill">${escapeHtml(r.title)}</div>
+  <p>${escapeHtml(r.desc)}</p>
+  <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+    <button class="btn primary" id="btnRetake">Retake quiz</button>
+    <button class="btn" id="btnShare">Copy result text</button>
+  </div>
+  <p style="margin-top:12px; font-size:12.5px; opacity:.9;">
+    Result key: <span style="opacity:.9">${escapeHtml(winner)}</span>
+  </p>
+`;
+
+resultEl.innerHTML = resultHTML;
 
       document.getElementById("btnRetake").addEventListener("click", () => {
         state.index = 0;
