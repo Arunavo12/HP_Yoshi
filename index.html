@@ -2293,8 +2293,9 @@ function renderHome(){
     const count = q.questions.length;
 
     // Only movie quizzes get images — using their id.png
-    const isMovieQuiz = q.id.startsWith("movie");
-    const imageSrc = isMovieQuiz ? `${q.id}.png` : null;
+    // Use explicit cover if provided, otherwise for movie quizzes use `${id}.png`
+const imageSrc = q.cover ? q.cover : (q.id.startsWith("movie") ? `${q.id}.png` : null);
+
 
     return `
       <article class="card" role="button" tabindex="0" aria-label="Start quiz: ${escapeHtml(q.title)}" data-quiz="${q.id}">
