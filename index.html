@@ -728,6 +728,7 @@ results: {
         desc: "Not what you’re good at — what you’d love to study every day.",
         category: "personality",
         minutes: 4,
+        cover: "subjects.png",
         questions: [
           { text: "Ideal class vibe?", options: [
             { title: "Explosive experiments", desc: "", scores: { POTIONS: 3 } },
@@ -2292,10 +2293,8 @@ function renderHome(){
     const count = q.questions.length;
 
     // Only movie quizzes get images — using their id.png
-    // Any quiz can have a cover image
-const imageSrc = q.cover || (q.id.startsWith("movie") ? `${q.id}.png` : null);
-
-
+    const isMovieQuiz = q.id.startsWith("movie");
+    const imageSrc = isMovieQuiz ? `${q.id}.png` : null;
 
     return `
       <article class="card" role="button" tabindex="0" aria-label="Start quiz: ${escapeHtml(q.title)}" data-quiz="${q.id}">
