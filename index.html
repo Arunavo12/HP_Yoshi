@@ -305,6 +305,20 @@
       margin-left:8px;
       background: rgba(0,0,0,.25);
     }
+
+    html{ scroll-behavior:smooth; }
+
+.movieSection{
+  margin-top: 26px;
+}
+
+.movieTitle{
+  margin: 0 0 12px;
+  font-size: 18px;
+  letter-spacing: .2px;
+  color: var(--text);
+}
+
   </style>
 </head>
 <body>
@@ -315,6 +329,7 @@
         <h1>Happy New Year, Yoshi! ✨</h1>
         <p>Hey little sis — your big bro made this just for you 💜</p>
         <p>8 movie trivia quizzes, one for each Harry Potter film. How well do you remember our favorites?</p>
+        <a class="btn primary" href="#philosophers-stone">Watch: Philosopher’s Stone</a>
       </div>
 
       <div class="pill" title="Search and filter quizzes">
@@ -334,13 +349,18 @@
     <section id="view-home" class="view active">
       <div id="quizGrid" class="grid"></div>
 
-        <div class="video-wrap">
+        <section id="philosophers-stone" class="movieSection">
+  <h2 class="movieTitle">🎬 Philosopher’s Stone</h2>
+
+  <div class="video-wrap">
     <iframe
       src="https://drive.google.com/file/d/1rKAv7DqP1BLR3EoPm29YsVUzeLjozkeC/preview"
       allow="autoplay; fullscreen"
       allowfullscreen>
     </iframe>
   </div>
+</section>
+
       <footer>
       </footer>
     </section>
