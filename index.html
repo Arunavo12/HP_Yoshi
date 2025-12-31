@@ -1,0 +1,855 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <title>Wizarding Quiz Vault</title>
+  <meta name="description" content="A vault of wizarding quizzes: houses, characters, patronus vibes, wand vibes, and more." />
+  <style>
+    :root{
+      --bg:#070711;
+      --card:#0f1020;
+      --card2:#12142a;
+      --text:#f3f4ff;
+      --muted:#b9b9d6;
+      --accent:#ff8fc8;
+      --accent2:#7c5cff;
+      --good:#41f5c0;
+      --bad:#ff4d6d;
+      --border: rgba(255,255,255,.14);
+      --shadow: 0 22px 90px rgba(0,0,0,.65);
+    }
+    *{box-sizing:border-box;}
+    html,body{height:100%;}
+    body{
+      margin:0;
+      font-family: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(124,92,255,.25), transparent 60%),
+        radial-gradient(900px 520px at 85% 20%, rgba(255,143,200,.18), transparent 60%),
+        radial-gradient(700px 460px at 50% 100%, rgba(65,245,192,.10), transparent 60%),
+        var(--bg);
+      overflow-x:hidden;
+    }
+    a{color:inherit;}
+    .wrap{max-width:1100px;margin:0 auto;padding:26px 18px 70px;}
+    header{
+      display:flex; gap:14px; align-items:center; justify-content:space-between;
+      margin-bottom:18px;
+    }
+    .brand{
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .brand h1{
+      margin:0;
+      font-size: clamp(22px, 3vw, 34px);
+      letter-spacing:.3px;
+      line-height:1.05;
+    }
+    .brand p{margin:0;color:var(--muted);font-size:14px;}
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      border-radius:999px;
+      box-shadow: 0 10px 50px rgba(0,0,0,.25);
+      backdrop-filter: blur(10px);
+    }
+    .pill input{
+      width: 260px;
+      max-width: 55vw;
+      background:transparent;
+      border:0;
+      outline:0;
+      color:var(--text);
+      font-size:14px;
+    }
+    .pill select{
+      background: rgba(0,0,0,.25);
+      border:1px solid var(--border);
+      color:var(--text);
+      border-radius:999px;
+      padding:7px 10px;
+      font-size:13px;
+      outline:none;
+      cursor:pointer;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap:14px;
+      margin-top:18px;
+    }
+    .card{
+      grid-column: span 4;
+      border:1px solid var(--border);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+      position:relative;
+      cursor:pointer;
+      transition: transform .12s ease, border-color .12s ease, background .12s ease;
+    }
+    .card:hover{ transform: translateY(-2px); border-color: rgba(255,255,255,.22); }
+    .card .top{
+      padding:14px 14px 10px;
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+    }
+    .badge{
+      font-size:12px;
+      color: var(--muted);
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      padding:6px 10px;
+      border-radius:999px;
+      white-space:nowrap;
+    }
+    .card h3{ margin:0; font-size:16px; letter-spacing:.2px; }
+    .card p{ margin:8px 14px 14px; color: var(--muted); font-size:13px; line-height:1.35; }
+    .card .meta{
+      display:flex; gap:10px; align-items:center;
+      padding: 0 14px 14px;
+      color: var(--muted);
+      font-size:12px;
+    }
+    .dot{
+      width:7px;height:7px;border-radius:99px;background: var(--accent);
+      box-shadow: 0 0 18px rgba(255,143,200,.7);
+    }
+    .dot.alt{ background: var(--accent2); box-shadow: 0 0 18px rgba(124,92,255,.7); }
+    .dot.good{ background: var(--good); box-shadow: 0 0 18px rgba(65,245,192,.6); }
+
+    /* Views */
+    .view{ display:none; }
+    .view.active{ display:block; }
+
+    /* Quiz runner */
+    .runner{
+      margin-top:18px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .runnerTop{
+      padding:16px 16px 12px;
+      display:flex; gap:12px; align-items:flex-start; justify-content:space-between;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+    }
+    .runnerTop h2{ margin:0; font-size:18px; }
+    .runnerTop p{ margin:6px 0 0; color:var(--muted); font-size:13px; }
+    .actions{ display:flex; gap:10px; align-items:center; }
+    .btn{
+      border:1px solid var(--border);
+      background: rgba(0,0,0,.25);
+      color:var(--text);
+      padding:10px 12px;
+      border-radius:12px;
+      cursor:pointer;
+      font-weight:600;
+      font-size:13px;
+      transition: transform .08s ease, border-color .12s ease;
+      user-select:none;
+    }
+    .btn:hover{ border-color: rgba(255,255,255,.24); }
+    .btn:active{ transform: translateY(1px); }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(124,92,255,.35), rgba(255,143,200,.22));
+      border-color: rgba(255,255,255,.22);
+    }
+    .btn.ghost{ background: transparent; }
+    .bar{
+      height:10px;
+      background: rgba(255,255,255,.08);
+      border-radius:999px;
+      overflow:hidden;
+      margin-top:10px;
+    }
+    .bar > div{
+      height:100%;
+      width:0%;
+      background: linear-gradient(90deg, var(--accent2), var(--accent));
+      border-radius:999px;
+      transition: width .2s ease;
+    }
+    .runnerBody{ padding:16px; }
+    .qTitle{
+      font-size:16px;
+      margin:0 0 12px;
+      letter-spacing:.2px;
+    }
+    .opts{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:10px;
+    }
+    .opt{
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+      padding:12px 12px;
+      border-radius:14px;
+      cursor:pointer;
+      transition: border-color .12s ease, transform .08s ease, background .12s ease;
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+    }
+    .opt:hover{ border-color: rgba(255,255,255,.25); }
+    .opt:active{ transform: translateY(1px); }
+    .radio{
+      width:16px;height:16px;border-radius:999px;
+      border:2px solid rgba(255,255,255,.35);
+      margin-top:2px;
+      flex: 0 0 auto;
+      position:relative;
+    }
+    .opt.selected{
+      border-color: rgba(255,143,200,.35);
+      background: rgba(255,143,200,.08);
+    }
+    .opt.selected .radio{
+      border-color: rgba(255,143,200,.85);
+      box-shadow: 0 0 18px rgba(255,143,200,.35);
+    }
+    .opt.selected .radio::after{
+      content:"";
+      position:absolute; inset:3px;
+      border-radius:999px;
+      background: var(--accent);
+    }
+    .opt .t{
+      display:flex; flex-direction:column; gap:4px;
+    }
+    .opt .t strong{ font-size:13.5px; }
+    .opt .t span{ color:var(--muted); font-size:12.5px; line-height:1.25; }
+
+    .runnerBottom{
+      padding:14px 16px;
+      border-top:1px solid rgba(255,255,255,.08);
+      display:flex; justify-content:space-between; align-items:center; gap:10px;
+      background: rgba(0,0,0,.18);
+      flex-wrap:wrap;
+    }
+    .hint{ color:var(--muted); font-size:12.5px; }
+
+    /* Result */
+    .resultBox{
+      margin-top:18px;
+      border:1px solid var(--border);
+      background: rgba(255,255,255,.06);
+      border-radius:18px;
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .resultBox h2{ margin:0; font-size:18px; }
+    .resultBox p{ color:var(--muted); line-height:1.45; margin:10px 0 0; font-size:13.5px;}
+    .resultPill{
+      display:inline-flex; align-items:center; gap:10px;
+      margin-top:12px;
+      padding:10px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.25);
+      font-weight:700;
+    }
+
+    /* Responsive */
+    @media (max-width: 980px){
+      .card{ grid-column: span 6; }
+    }
+    @media (max-width: 640px){
+      header{ flex-direction:column; align-items:flex-start; }
+      .pill{ width:100%; justify-content:space-between; }
+      .pill input{ width: 55%; }
+      .card{ grid-column: span 12; }
+    }
+
+    /* Tiny footer */
+    footer{
+      margin-top:28px;
+      color: rgba(185,185,214,.8);
+      font-size:12px;
+      line-height:1.4;
+    }
+    .smallTag{
+      display:inline-block;
+      padding:2px 8px;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:999px;
+      margin-left:8px;
+      background: rgba(0,0,0,.25);
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="brand">
+        <h1>Happy New Year Yoshi ✨</h1>
+        <p> I thought as your older brother, I had to do something for you on new years so here you go :) </p>
+        <p>Pick a quiz. Get a result. Add as many quizzes as you want — no rewrites.</p>
+      </div>
+
+      <div class="pill" title="Search and filter quizzes">
+        <span aria-hidden="true">🔎</span>
+        <input id="search" type="text" placeholder="Search quizzes (house, wand, duels...)">
+        <select id="category">
+          <option value="all">All</option>
+          <option value="sorting">Sorting</option>
+          <option value="personality">Personality</option>
+          <option value="lore">Lore</option>
+          <option value="fun">Fun</option>
+        </select>
+      </div>
+    </header>
+
+    <!-- HOME VIEW -->
+    <section id="view-home" class="view active">
+      <div id="quizGrid" class="grid"></div>
+
+      <footer>
+        Tip: Add quizzes by editing the <span class="smallTag">QUIZZES</span> array in the script.
+        You can also add images for each quiz card and each result (optional).
+      </footer>
+    </section>
+
+    <!-- QUIZ VIEW -->
+    <section id="view-quiz" class="view">
+      <div class="runner">
+        <div class="runnerTop">
+          <div>
+            <h2 id="quizTitle">Quiz</h2>
+            <p id="quizDesc">Description</p>
+            <div class="bar" aria-label="Progress">
+              <div id="progress"></div>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn ghost" id="btnHome">← Home</button>
+            <button class="btn" id="btnRestart">Restart</button>
+          </div>
+        </div>
+
+        <div class="runnerBody">
+          <p class="qTitle" id="qText">Question text</p>
+          <div class="opts" id="opts"></div>
+        </div>
+
+        <div class="runnerBottom">
+          <div class="hint" id="hint">Choose an answer to continue.</div>
+          <div class="actions">
+            <button class="btn" id="btnBack">Back</button>
+            <button class="btn primary" id="btnNext">Next</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="result" class="resultBox" style="display:none"></div>
+    </section>
+
+  </div>
+
+  <script>
+    /**
+     * =========================
+     *  QUIZZES: ADD MORE HERE
+     * =========================
+     *
+     * Each quiz:
+     * - id: unique string
+     * - title/desc/category
+     * - minutes: display only
+     * - questions: array of { text, options[] }
+     * - Each option: { title, desc, scores: { RESULT_KEY: number, ... } }
+     * - results: map of RESULT_KEY -> { title, desc }
+     *
+     * Scoring:
+     * - We sum scores across answers for each RESULT_KEY.
+     * - Highest score wins (ties broken by whichever appears first in results).
+     */
+
+    const QUIZZES = [
+      {
+        id: "house-sorting",
+        title: "Which House Fits You Best?",
+        desc: "A vibes-based sorting quiz — no gatekeeping, just magic.",
+        category: "sorting",
+        minutes: 3,
+        questions: [
+          {
+            text: "A friend is being unfairly blamed. What do you do first?",
+            options: [
+              { title: "Step in immediately", desc: "Even if it gets messy.", scores: { GRYFFINDOR: 3, HUFFLEPUFF: 1 } },
+              { title: "Gather facts", desc: "Then defend them properly.", scores: { RAVENCLAW: 3, SLYTHERIN: 1 } },
+              { title: "Support them quietly", desc: "Stay by their side.", scores: { HUFFLEPUFF: 3, GRYFFINDOR: 1 } },
+              { title: "Change the situation", desc: "Flip it strategically.", scores: { SLYTHERIN: 3, RAVENCLAW: 1 } },
+            ]
+          },
+          {
+            text: "Pick a magical weekend:",
+            options: [
+              { title: "Spontaneous adventure", desc: "No plan, just momentum.", scores: { GRYFFINDOR: 3 } },
+              { title: "A cozy feast + laughs", desc: "Everyone included.", scores: { HUFFLEPUFF: 3 } },
+              { title: "A library + hidden secrets", desc: "Knowledge hunt mode.", scores: { RAVENCLAW: 3 } },
+              { title: "A mission with a goal", desc: "Big outcome energy.", scores: { SLYTHERIN: 3 } },
+            ]
+          },
+          {
+            text: "Your biggest strength is…",
+            options: [
+              { title: "Courage", desc: "You move even while scared.", scores: { GRYFFINDOR: 3 } },
+              { title: "Loyalty", desc: "You show up. Always.", scores: { HUFFLEPUFF: 3 } },
+              { title: "Curiosity", desc: "You need to understand.", scores: { RAVENCLAW: 3 } },
+              { title: "Ambition", desc: "You aim high on purpose.", scores: { SLYTHERIN: 3 } },
+            ]
+          },
+          {
+            text: "A challenge appears. Your style?",
+            options: [
+              { title: "Charge in", desc: "We’ll figure it out live.", scores: { GRYFFINDOR: 2, SLYTHERIN: 1 } },
+              { title: "Work with people", desc: "Team it up properly.", scores: { HUFFLEPUFF: 2, GRYFFINDOR: 1 } },
+              { title: "Research", desc: "There’s always a method.", scores: { RAVENCLAW: 2 } },
+              { title: "Outsmart it", desc: "Positioning matters.", scores: { SLYTHERIN: 2, RAVENCLAW: 1 } },
+            ]
+          }
+        ],
+        results: {
+          GRYFFINDOR: { title: "Gryffindor 🦁", desc: "Bold-hearted, action-first, and fiercely protective. You’re the spark that turns fear into movement." },
+          HUFFLEPUFF: { title: "Hufflepuff 🦡", desc: "Loyal, kind, and quietly strong. You build safe spaces — and that’s real power." },
+          RAVENCLAW: { title: "Ravenclaw 🦅", desc: "Curious, clever, and thoughtful. You see patterns others miss and bring calm logic to chaos." },
+          SLYTHERIN: { title: "Slytherin 🐍", desc: "Ambitious, strategic, and resilient. You don’t just dream — you execute." }
+        }
+      },
+
+      {
+        id: "character-vibes",
+        title: "Which Character Matches Your Energy?",
+        desc: "Not ‘who you like most’ — who you *move like*.",
+        category: "personality",
+        minutes: 4,
+        questions: [
+          {
+            text: "In a group project, you usually…",
+            options: [
+              { title: "Carry the stress so others don’t", desc: "Responsibility mode.", scores: { HERMIONE: 3, HARRY: 1 } },
+              { title: "Keep the mood alive", desc: "Jokes + morale.", scores: { RON: 3, FREDGEORGE: 2 } },
+              { title: "Lead when it counts", desc: "Quiet until necessary.", scores: { HARRY: 3 } },
+              { title: "See the shortcut", desc: "Efficiency + tactics.", scores: { DRACO: 3, SNAPE: 1 } },
+            ]
+          },
+          {
+            text: "Your friends rely on you for…",
+            options: [
+              { title: "The plan", desc: "If you didn’t plan, it didn’t happen.", scores: { HERMIONE: 3 } },
+              { title: "The courage", desc: "You’ll face the awkward/hard thing.", scores: { HARRY: 3, LUNA: 1 } },
+              { title: "The comfort", desc: "You make people feel safe.", scores: { RON: 2, NEVILLE: 3 } },
+              { title: "The realism", desc: "Hard truth, but helpful.", scores: { SNAPE: 3, DRACO: 1 } },
+            ]
+          },
+          {
+            text: "Pick a vibe:",
+            options: [
+              { title: "Bookish brilliance", desc: "Brain is always on.", scores: { HERMIONE: 3 } },
+              { title: "Underdog glow-up", desc: "Late bloomer, massive heart.", scores: { NEVILLE: 3 } },
+              { title: "Soft strange wisdom", desc: "You’re different and you own it.", scores: { LUNA: 3 } },
+              { title: "Chaotic comedy", desc: "Mischief but lovable.", scores: { FREDGEORGE: 3, RON: 1 } },
+            ]
+          }
+        ],
+        results: {
+          HARRY: { title: "Harry Potter ⚡", desc: "You don’t ask to be the main character — you just keep showing up when it matters." },
+          HERMIONE: { title: "Hermione Granger 📚", desc: "You’re prepared, principled, and you don’t let people stay wrong when it counts." },
+          RON: { title: "Ron Weasley 🧡", desc: "You’re loyal, funny, and real — the glue that holds the group together." },
+          LUNA: { title: "Luna Lovegood 🌙", desc: "Gentle, observant, and quietly fearless. You see magic where others see ‘weird’." },
+          NEVILLE: { title: "Neville Longbottom 🌿", desc: "You’re proof that courage grows. You get stronger by choosing to try." },
+          FREDGEORGE: { title: "Fred & George energy 🎇", desc: "You’re the chaos that makes life lighter — but you’re sharper than people assume." },
+          DRACO: { title: "Draco Malfoy 🐍", desc: "You’re guarded, ambitious, and you play the social game well — even when you’re conflicted." },
+          SNAPE: { title: "Severus Snape 🖤", desc: "Complex, intense, and loyal in your own way. You don’t need applause to do the hard thing." }
+        }
+      },
+
+      {
+        id: "patronus-vibe",
+        title: "What’s Your Patronus Vibe?",
+        desc: "Not a strict canon animal — more like your protective energy.",
+        category: "fun",
+        minutes: 3,
+        questions: [
+          {
+            text: "When life gets heavy, you cope by…",
+            options: [
+              { title: "Moving your body", desc: "Walk, gym, football, anything.", scores: { STAG: 3, WOLF: 2 } },
+              { title: "Talking to your people", desc: "You don’t do it alone.", scores: { OTTER: 3, DOG: 2 } },
+              { title: "Going inward", desc: "Music, solitude, thinking.", scores: { DOE: 3, CAT: 2 } },
+              { title: "Turning pain into focus", desc: "You lock in and rebuild.", scores: { PHOENIX: 3, WOLF: 2 } },
+            ]
+          },
+          {
+            text: "Your protection style is…",
+            options: [
+              { title: "Warm + playful", desc: "You lift people up.", scores: { OTTER: 3 } },
+              { title: "Quiet + loyal", desc: "Steady presence.", scores: { DOG: 3, DOE: 1 } },
+              { title: "Fierce + watchful", desc: "You notice everything.", scores: { WOLF: 3, CAT: 1 } },
+              { title: "Unbreakable hope", desc: "You rise again.", scores: { PHOENIX: 3 } },
+            ]
+          }
+        ],
+        results: {
+          STAG: { title: "Stag ✨", desc: "Protective leader energy. You hold your ground and guide people through the dark." },
+          OTTER: { title: "Otter 🫧", desc: "Joy as protection. Your lightness is a shield — for you and for others." },
+          DOE: { title: "Doe 🌙", desc: "Soft strength. You protect with care, memory, and deep emotional courage." },
+          WOLF: { title: "Wolf 🐺", desc: "Guardianship and instincts. You defend what’s yours — and you’re smarter than people think." },
+          DOG: { title: "Dog 🐾", desc: "Loyal companion. Your presence alone makes people feel safe." },
+          CAT: { title: "Cat 🐈", desc: "Independent protector. You survive, adapt, and stay sharp." },
+          PHOENIX: { title: "Phoenix 🔥", desc: "Rebirth energy. You’ve been through it — and you still choose hope." }
+        }
+      },
+
+      {
+        id: "wand-vibe",
+        title: "What’s Your Wand Vibe?",
+        desc: "Core + wood vibe. More aesthetic than canon-locked.",
+        category: "lore",
+        minutes: 3,
+        questions: [
+          {
+            text: "You’re at your best when you’re…",
+            options: [
+              { title: "Improvising", desc: "Fast, reactive, creative.", scores: { PHOENIXCORE: 3, DRAGONCORE: 1 } },
+              { title: "Determined", desc: "You push through anything.", scores: { DRAGONCORE: 3 } },
+              { title: "Calm + consistent", desc: "Reliable, steady, grounded.", scores: { UNICORNCORE: 3 } },
+              { title: "Exploring ideas", desc: "You follow curiosity.", scores: { UNICORNCORE: 1, PHOENIXCORE: 2 } },
+            ]
+          },
+          {
+            text: "Pick a ‘magic aesthetic’:",
+            options: [
+              { title: "Bright + dramatic", desc: "Big spells, big energy.", scores: { DRAGONCORE: 3, OAK: 1 } },
+              { title: "Clean + precise", desc: "Controlled, elegant casting.", scores: { UNICORNCORE: 3, ELM: 1 } },
+              { title: "Wild + rare", desc: "Unpredictable, powerful.", scores: { PHOENIXCORE: 3, HOLLY: 1 } },
+              { title: "Ancient + grounded", desc: "Deep roots, deep strength.", scores: { OAK: 3, UNICORNCORE: 1 } },
+            ]
+          }
+        ],
+        results: {
+          DRAGONCORE: { title: "Dragon Core 🐉", desc: "Power-forward. You commit hard, you learn fast, and you don’t do half-measures." },
+          UNICORNCORE: { title: "Unicorn Core 🦄", desc: "Consistent and safe. You’re strong in a steady way — disciplined magic." },
+          PHOENIXCORE: { title: "Phoenix Core 🪶", desc: "Rare, intuitive, and intense. Your magic adapts — sometimes before you do." },
+          OAK: { title: "Oak Wood 🌳", desc: "Sturdy, protective, dependable. You’re the ‘shield’ friend." },
+          ELM: { title: "Elm Wood 🍃", desc: "Precision and intellect. You’re good at clean solutions and sharp choices." },
+          HOLLY: { title: "Holly Wood ✨", desc: "Bold, lightning-energy. You attract big moments." }
+        }
+      },
+    ];
+
+    // ---------- App State ----------
+    const state = {
+      view: "home",
+      quiz: null,
+      index: 0,
+      answers: [], // chosen option index per question
+    };
+
+    // ---------- Elements ----------
+    const viewHome = document.getElementById("view-home");
+    const viewQuiz = document.getElementById("view-quiz");
+
+    const quizGrid = document.getElementById("quizGrid");
+    const searchEl = document.getElementById("search");
+    const categoryEl = document.getElementById("category");
+
+    const quizTitle = document.getElementById("quizTitle");
+    const quizDesc = document.getElementById("quizDesc");
+    const progressEl = document.getElementById("progress");
+
+    const qText = document.getElementById("qText");
+    const optsEl = document.getElementById("opts");
+    const hintEl = document.getElementById("hint");
+
+    const btnHome = document.getElementById("btnHome");
+    const btnRestart = document.getElementById("btnRestart");
+    const btnBack = document.getElementById("btnBack");
+    const btnNext = document.getElementById("btnNext");
+
+    const resultEl = document.getElementById("result");
+
+    // ---------- Helpers ----------
+    function setView(name){
+      state.view = name;
+      viewHome.classList.toggle("active", name === "home");
+      viewQuiz.classList.toggle("active", name === "quiz");
+      if(name === "home"){
+        resultEl.style.display = "none";
+        resultEl.innerHTML = "";
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function categoryDot(cat){
+      if(cat === "sorting") return `<span class="dot alt"></span>`;
+      if(cat === "personality") return `<span class="dot"></span>`;
+      if(cat === "lore") return `<span class="dot good"></span>`;
+      return `<span class="dot"></span>`;
+    }
+
+    function renderHome(){
+      const term = (searchEl.value || "").trim().toLowerCase();
+      const cat = categoryEl.value;
+
+      const filtered = QUIZZES.filter(q => {
+        const matchesTerm =
+          !term ||
+          q.title.toLowerCase().includes(term) ||
+          q.desc.toLowerCase().includes(term) ||
+          q.category.toLowerCase().includes(term);
+
+        const matchesCat = (cat === "all") || (q.category === cat);
+        return matchesTerm && matchesCat;
+      });
+
+      quizGrid.innerHTML = filtered.map(q => {
+        const count = q.questions.length;
+        return `
+          <article class="card" role="button" tabindex="0" aria-label="Start quiz: ${escapeHtml(q.title)}" data-quiz="${q.id}">
+            <div class="top">
+              <div>
+                <h3>${escapeHtml(q.title)}</h3>
+              </div>
+              <div class="badge">${escapeHtml(q.category)} • ~${q.minutes} min</div>
+            </div>
+            <p>${escapeHtml(q.desc)}</p>
+            <div class="meta">
+              ${categoryDot(q.category)}
+              <span>${count} questions</span>
+              <span>•</span>
+              <span>Tap to start</span>
+            </div>
+          </article>
+        `;
+      }).join("");
+
+      // Click handlers
+      [...quizGrid.querySelectorAll(".card")].forEach(card => {
+        card.addEventListener("click", () => startQuiz(card.dataset.quiz));
+        card.addEventListener("keydown", (e) => {
+          if(e.key === "Enter" || e.key === " ") startQuiz(card.dataset.quiz);
+        });
+      });
+
+      if(filtered.length === 0){
+        quizGrid.innerHTML = `
+          <div class="card" style="grid-column: span 12; cursor:default;">
+            <div class="top">
+              <div>
+                <h3>No quizzes found</h3>
+              </div>
+              <div class="badge">Try another search</div>
+            </div>
+            <p>Try searching “house”, “wand”, “duel”, “Hogwarts”, “Weasley”, etc.</p>
+            <div class="meta"><span class="dot"></span><span>Tip: Add more quizzes in the QUIZZES array.</span></div>
+          </div>
+        `;
+      }
+    }
+
+    function startQuiz(quizId){
+      const quiz = QUIZZES.find(q => q.id === quizId);
+      if(!quiz) return;
+
+      state.quiz = quiz;
+      state.index = 0;
+      state.answers = Array(quiz.questions.length).fill(null);
+
+      quizTitle.textContent = quiz.title;
+      quizDesc.textContent = quiz.desc;
+
+      resultEl.style.display = "none";
+      resultEl.innerHTML = "";
+
+      setView("quiz");
+      renderQuestion();
+    }
+
+    function renderQuestion(){
+      const quiz = state.quiz;
+      const i = state.index;
+      const total = quiz.questions.length;
+
+      const q = quiz.questions[i];
+      qText.textContent = `${i+1}/${total} — ${q.text}`;
+
+      // progress
+      const pct = Math.round((i / total) * 100);
+      progressEl.style.width = `${pct}%`;
+
+      // options
+      optsEl.innerHTML = q.options.map((o, idx) => {
+        const selected = state.answers[i] === idx ? "selected" : "";
+        return `
+          <div class="opt ${selected}" role="button" tabindex="0" data-idx="${idx}">
+            <div class="radio" aria-hidden="true"></div>
+            <div class="t">
+              <strong>${escapeHtml(o.title)}</strong>
+              <span>${escapeHtml(o.desc || "")}</span>
+            </div>
+          </div>
+        `;
+      }).join("");
+
+      [...optsEl.querySelectorAll(".opt")].forEach(opt => {
+        opt.addEventListener("click", () => chooseOption(Number(opt.dataset.idx)));
+        opt.addEventListener("keydown", (e) => {
+          if(e.key === "Enter" || e.key === " ") chooseOption(Number(opt.dataset.idx));
+        });
+      });
+
+      // buttons
+      btnBack.disabled = (i === 0);
+      btnBack.style.opacity = (i === 0) ? 0.55 : 1;
+
+      const chosen = state.answers[i] !== null;
+      hintEl.textContent = chosen ? "Nice. You can go next — or change your answer." : "Choose an answer to continue.";
+      btnNext.textContent = (i === total - 1) ? "Finish" : "Next";
+    }
+
+    function chooseOption(idx){
+      state.answers[state.index] = idx;
+      renderQuestion();
+    }
+
+    function goBack(){
+      if(state.index > 0){
+        state.index--;
+        renderQuestion();
+      }
+    }
+
+    function goNext(){
+      const quiz = state.quiz;
+      const i = state.index;
+      const total = quiz.questions.length;
+
+      if(state.answers[i] === null){
+        hintEl.textContent = "Pick an answer first 🙂";
+        return;
+      }
+
+      if(i < total - 1){
+        state.index++;
+        renderQuestion();
+      } else {
+        // finish
+        showResult();
+      }
+    }
+
+    function showResult(){
+      const quiz = state.quiz;
+      const score = {}; // key -> number
+
+      // init scores
+      Object.keys(quiz.results).forEach(k => score[k] = 0);
+
+      quiz.questions.forEach((q, qi) => {
+        const ai = state.answers[qi];
+        const opt = q.options[ai];
+        if(!opt || !opt.scores) return;
+        for(const [k, v] of Object.entries(opt.scores)){
+          if(score[k] === undefined) score[k] = 0;
+          score[k] += Number(v) || 0;
+        }
+      });
+
+      // pick max
+      const keys = Object.keys(quiz.results);
+      let winner = keys[0];
+      for(const k of keys){
+        if((score[k] ?? 0) > (score[winner] ?? 0)) winner = k;
+      }
+
+      // progress to 100%
+      progressEl.style.width = "100%";
+
+      const r = quiz.results[winner];
+      resultEl.style.display = "block";
+      resultEl.innerHTML = `
+        <h2>Your result:</h2>
+        <div class="resultPill">${escapeHtml(r.title)}</div>
+        <p>${escapeHtml(r.desc)}</p>
+        <div style="display:flex; gap:10px; margin-top:14px; flex-wrap:wrap;">
+          <button class="btn primary" id="btnRetake">Retake quiz</button>
+          <button class="btn" id="btnShare">Copy result text</button>
+        </div>
+        <p style="margin-top:12px; font-size:12.5px; opacity:.9;">
+          Result key: <span style="opacity:.9">${escapeHtml(winner)}</span>
+        </p>
+      `;
+
+      document.getElementById("btnRetake").addEventListener("click", () => {
+        state.index = 0;
+        state.answers = Array(quiz.questions.length).fill(null);
+        resultEl.style.display = "none";
+        resultEl.innerHTML = "";
+        renderQuestion();
+      });
+
+      document.getElementById("btnShare").addEventListener("click", async () => {
+        const text = `Wizarding Quiz Vault — ${quiz.title}\nResult: ${r.title}\n${r.desc}`;
+        try{
+          await navigator.clipboard.writeText(text);
+          document.getElementById("btnShare").textContent = "Copied ✅";
+          setTimeout(() => document.getElementById("btnShare").textContent = "Copy result text", 1400);
+        }catch{
+          alert("Couldn’t copy automatically — your browser blocked clipboard access.");
+        }
+      });
+
+      // scroll to result
+      resultEl.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function restartQuiz(){
+      if(!state.quiz) return;
+      state.index = 0;
+      state.answers = Array(state.quiz.questions.length).fill(null);
+      resultEl.style.display = "none";
+      resultEl.innerHTML = "";
+      renderQuestion();
+    }
+
+    function escapeHtml(str){
+      return String(str)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+    }
+
+    // ---------- Events ----------
+    searchEl.addEventListener("input", renderHome);
+    categoryEl.addEventListener("change", renderHome);
+
+    btnHome.addEventListener("click", () => setView("home"));
+    btnRestart.addEventListener("click", restartQuiz);
+    btnBack.addEventListener("click", goBack);
+    btnNext.addEventListener("click", goNext);
+
+    // keyboard: arrows
+    document.addEventListener("keydown", (e) => {
+      if(state.view !== "quiz") return;
+      if(e.key === "ArrowLeft") goBack();
+      if(e.key === "ArrowRight") goNext();
+    });
+
+    // ---------- Init ----------
+    renderHome();
+  </script>
+</body>
+</html>
