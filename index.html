@@ -2264,11 +2264,19 @@ function renderHome(){
 
     return `
       <article class="card" role="button" tabindex="0" aria-label="Start quiz: ${escapeHtml(q.title)}" data-quiz="${q.id}">
-        ${imageSrc ? `
-          <div style="height:200px; overflow:hidden; border-radius:18px 18px 0 0;">
-            <img src="${imageSrc}" alt="${escapeHtml(q.title)} poster" style="width:100%; height:100%; object-fit:cover;">
-          </div>
-        ` : ''}
+${imageSrc ? `
+  <div style="height:240px; overflow:hidden; border-radius:18px 18px 0 0; background:#0a0b18;">
+    <img src="${imageSrc}" alt="${escapeHtml(q.title)} poster" style="
+      width:100%; 
+      height:100%; 
+      object-fit: contain; 
+      object-position: center; 
+      background:#0a0b18;
+      padding: 8px 0;
+    ">
+  </div>
+` : ''}
+  </div>
         <div class="top" style="${imageSrc ? 'padding-top:12px;' : ''}">
           <div>
             <h3>${escapeHtml(q.title)}</h3>
